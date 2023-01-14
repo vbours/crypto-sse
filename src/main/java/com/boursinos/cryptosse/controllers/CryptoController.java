@@ -2,6 +2,7 @@
 package com.boursinos.cryptosse.controllers;
 
 import com.boursinos.cryptosse.model.response.CoinResponse;
+import org.apache.log4j.Logger;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
@@ -16,6 +17,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @RestController
 public class CryptoController {
+
+    static final Logger logger = Logger.getLogger(CryptoController.class);
+
     private final Set<SseEmitter> clients = new CopyOnWriteArraySet<>();
 
     @GetMapping("/crypto-stream")
@@ -32,9 +36,10 @@ public class CryptoController {
     @EventListener
     public void stockMessageHandler(CoinResponse coinResponse) {
         List<SseEmitter> errorEmitters = new ArrayList<>();
-
+        logger.debug("Clients = " + clients.size());
         clients.forEach(emitter -> {
             try {
+                logger.debug(coinResponse);
                 emitter.send(coinResponse, MediaType.APPLICATION_JSON);
             } catch (Exception e) {
                 errorEmitters.add(emitter);
