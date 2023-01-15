@@ -1,26 +1,24 @@
 package com.boursinos.cryptosse;
 
-import com.boursinos.cryptosse.clients.MessariClientImpl;
-import com.boursinos.cryptosse.clients.CoinGeckoClientImpl;
+import com.boursinos.cryptosse.clients.CryptoClient;
 import com.boursinos.cryptosse.model.response.CoinResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
 
 @SpringBootTest
-class CryptoSseApplicationTests {
-
+class MessariClientTest {
+	@Autowired
+	@Qualifier("MessariClientImpl")
+	private CryptoClient cryptoClient;
 	@Test
 	void contextLoads() throws JsonProcessingException {
-		CoinGeckoClientImpl cryptoClient = new CoinGeckoClientImpl();
 		CoinResponse coin = cryptoClient.getCurrentData("usd","bitcoin");
 		System.out.println(coin);
-	}
-	@Test
-	void contextLoads2(){
-		MessariClientImpl cryptoClient = new MessariClientImpl();
-		String coin = String.valueOf(cryptoClient.getCurrentData("","usd"));
-		System.out.println(coin);
+		Assert.isTrue(coin!=null);
 	}
 
 }
