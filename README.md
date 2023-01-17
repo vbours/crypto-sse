@@ -4,6 +4,7 @@
 
 * Java Spring Boot
 * SSE (Server Send Events)
+* Event Driven Programming
 * Event Listeners - Publishers
 * Unit tests
 
